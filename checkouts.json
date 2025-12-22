@@ -1,0 +1,668 @@
+[
+  {
+    "score": 60,
+    "firstDart": "20",
+    "secondDart": "D20",
+    "thirdDart": null
+  },
+  {
+    "score": 61,
+    "firstDart": "T15",
+    "secondDart": "D8",
+    "thirdDart": null
+  },
+  {
+    "score": 62,
+    "firstDart": "T10",
+    "secondDart": "D16",
+    "thirdDart": null
+  },
+  {
+    "score": 63,
+    "firstDart": "T13",
+    "secondDart": "D12",
+    "thirdDart": null
+  },
+  {
+    "score": 64,
+    "firstDart": "T16",
+    "secondDart": "D8",
+    "thirdDart": null
+  },
+  {
+    "score": 65,
+    "firstDart": "T19",
+    "secondDart": "D4",
+    "thirdDart": null
+  },
+  {
+    "score": 66,
+    "firstDart": "T10",
+    "secondDart": "D18",
+    "thirdDart": null
+  },
+  {
+    "score": 67,
+    "firstDart": "T17",
+    "secondDart": "D8",
+    "thirdDart": null
+  },
+  {
+    "score": 68,
+    "firstDart": "T20",
+    "secondDart": "D4",
+    "thirdDart": null
+  },
+  {
+    "score": 69,
+    "firstDart": "T15",
+    "secondDart": "D12",
+    "thirdDart": null
+  },
+  {
+    "score": 70,
+    "firstDart": "T10",
+    "secondDart": "D20",
+    "thirdDart": null
+  },
+  {
+    "score": 71,
+    "firstDart": "T13",
+    "secondDart": "D16",
+    "thirdDart": null
+  },
+  {
+    "score": 72,
+    "firstDart": "T16",
+    "secondDart": "D12",
+    "thirdDart": null
+  },
+  {
+    "score": 73,
+    "firstDart": "T19",
+    "secondDart": "D8",
+    "thirdDart": null
+  },
+  {
+    "score": 74,
+    "firstDart": "T14",
+    "secondDart": "D16",
+    "thirdDart": null
+  },
+  {
+    "score": 75,
+    "firstDart": "T17",
+    "secondDart": "D12",
+    "thirdDart": null
+  },
+  {
+    "score": 76,
+    "firstDart": "T20",
+    "secondDart": "D8",
+    "thirdDart": null
+  },
+  {
+    "score": 77,
+    "firstDart": "T19",
+    "secondDart": "D10",
+    "thirdDart": null
+  },
+  {
+    "score": 78,
+    "firstDart": "T18",
+    "secondDart": "D12",
+    "thirdDart": null
+  },
+  {
+    "score": 79,
+    "firstDart": "T19",
+    "secondDart": "D11",
+    "thirdDart": null
+  },
+  {
+    "score": 80,
+    "firstDart": "T20",
+    "secondDart": "D10",
+    "thirdDart": null
+  },
+  {
+    "score": 81,
+    "firstDart": "T19",
+    "secondDart": "D12",
+    "thirdDart": null
+  },
+  {
+    "score": 82,
+    "firstDart": "T14",
+    "secondDart": "D20",
+    "thirdDart": null
+  },
+  {
+    "score": 83,
+    "firstDart": "T17",
+    "secondDart": "D16",
+    "thirdDart": null
+  },
+  {
+    "score": 84,
+    "firstDart": "T20",
+    "secondDart": "D12",
+    "thirdDart": null
+  },
+  {
+    "score": 85,
+    "firstDart": "T15",
+    "secondDart": "D20",
+    "thirdDart": null
+  },
+  {
+    "score": 86,
+    "firstDart": "T18",
+    "secondDart": "D16",
+    "thirdDart": null
+  },
+  {
+    "score": 87,
+    "firstDart": "T17",
+    "secondDart": "D18",
+    "thirdDart": null
+  },
+  {
+    "score": 88,
+    "firstDart": "T16",
+    "secondDart": "D20",
+    "thirdDart": null
+  },
+  {
+    "score": 89,
+    "firstDart": "T19",
+    "secondDart": "D16",
+    "thirdDart": null
+  },
+  {
+    "score": 90,
+    "firstDart": "T20",
+    "secondDart": "D15",
+    "thirdDart": null
+  },
+  {
+    "score": 91,
+    "firstDart": "T17",
+    "secondDart": "D20",
+    "thirdDart": null
+  },
+  {
+    "score": 92,
+    "firstDart": "T20",
+    "secondDart": "D16",
+    "thirdDart": null
+  },
+  {
+    "score": 93,
+    "firstDart": "T19",
+    "secondDart": "D18",
+    "thirdDart": null
+  },
+  {
+    "score": 94,
+    "firstDart": "T18",
+    "secondDart": "D20",
+    "thirdDart": null
+  },
+  {
+    "score": 95,
+    "firstDart": "T19",
+    "secondDart": "D19",
+    "thirdDart": null
+  },
+  {
+    "score": 96,
+    "firstDart": "T20",
+    "secondDart": "D18",
+    "thirdDart": null
+  },
+  {
+    "score": 97,
+    "firstDart": "T19",
+    "secondDart": "D20",
+    "thirdDart": null
+  },
+  {
+    "score": 98,
+    "firstDart": "T20",
+    "secondDart": "D19",
+    "thirdDart": null
+  },
+  {
+    "score": 99,
+    "firstDart": "T19",
+    "secondDart": "10",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 100,
+    "firstDart": "T20",
+    "secondDart": "D20",
+    "thirdDart": null
+  },
+  {
+    "score": 101,
+    "firstDart": "T20",
+    "secondDart": "1",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 102,
+    "firstDart": "T20",
+    "secondDart": "10",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 103,
+    "firstDart": "T20",
+    "secondDart": "3",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 104,
+    "firstDart": "T18",
+    "secondDart": "18",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 105,
+    "firstDart": "T19",
+    "secondDart": "16",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 106,
+    "firstDart": "T20",
+    "secondDart": "14",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 107,
+    "firstDart": "T19",
+    "secondDart": "18",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 108,
+    "firstDart": "T20",
+    "secondDart": "16",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 109,
+    "firstDart": "T19",
+    "secondDart": "20",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 110,
+    "firstDart": "T20",
+    "secondDart": "18",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 111,
+    "firstDart": "T20",
+    "secondDart": "19",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 112,
+    "firstDart": "T20",
+    "secondDart": "12",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 113,
+    "firstDart": "T20",
+    "secondDart": "13",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 114,
+    "firstDart": "T20",
+    "secondDart": "14",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 115,
+    "firstDart": "T20",
+    "secondDart": "15",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 116,
+    "firstDart": "T20",
+    "secondDart": "16",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 117,
+    "firstDart": "T20",
+    "secondDart": "17",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 118,
+    "firstDart": "T20",
+    "secondDart": "18",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 119,
+    "firstDart": "T19",
+    "secondDart": "T10",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 120,
+    "firstDart": "T20",
+    "secondDart": "20",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 121,
+    "firstDart": "T17",
+    "secondDart": "T10",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 122,
+    "firstDart": "T18",
+    "secondDart": "T20",
+    "thirdDart": "D4"
+  },
+  {
+    "score": 123,
+    "firstDart": "T19",
+    "secondDart": "T16",
+    "thirdDart": "D9"
+  },
+  {
+    "score": 124,
+    "firstDart": "T20",
+    "secondDart": "T16",
+    "thirdDart": "D8"
+  },
+  {
+    "score": 125,
+    "firstDart": "25",
+    "secondDart": "T20",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 126,
+    "firstDart": "T19",
+    "secondDart": "T19",
+    "thirdDart": "D6"
+  },
+  {
+    "score": 127,
+    "firstDart": "T20",
+    "secondDart": "T17",
+    "thirdDart": "D8"
+  },
+  {
+    "score": 128,
+    "firstDart": "T18",
+    "secondDart": "T14",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 129,
+    "firstDart": "T19",
+    "secondDart": "T16",
+    "thirdDart": "D12"
+  },
+  {
+    "score": 130,
+    "firstDart": "T20",
+    "secondDart": "T20",
+    "thirdDart": "D5"
+  },
+  {
+    "score": 131,
+    "firstDart": "T20",
+    "secondDart": "T13",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 132,
+    "firstDart": "T20",
+    "secondDart": "T16",
+    "thirdDart": "D12"
+  },
+  {
+    "score": 133,
+    "firstDart": "T20",
+    "secondDart": "T19",
+    "thirdDart": "D8"
+  },
+  {
+    "score": 134,
+    "firstDart": "T20",
+    "secondDart": "T14",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 135,
+    "firstDart": "T20",
+    "secondDart": "T17",
+    "thirdDart": "D12"
+  },
+  {
+    "score": 136,
+    "firstDart": "T20",
+    "secondDart": "T20",
+    "thirdDart": "D8"
+  },
+  {
+    "score": 137,
+    "firstDart": "T19",
+    "secondDart": "T16",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 138,
+    "firstDart": "T20",
+    "secondDart": "T18",
+    "thirdDart": "D12"
+  },
+  {
+    "score": 139,
+    "firstDart": "T19",
+    "secondDart": "T14",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 140,
+    "firstDart": "T20",
+    "secondDart": "T16",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 141,
+    "firstDart": "T20",
+    "secondDart": "T19",
+    "thirdDart": "D12"
+  },
+  {
+    "score": 142,
+    "firstDart": "T20",
+    "secondDart": "T14",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 143,
+    "firstDart": "T20",
+    "secondDart": "T17",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 144,
+    "firstDart": "T20",
+    "secondDart": "T20",
+    "thirdDart": "D12"
+  },
+  {
+    "score": 145,
+    "firstDart": "T20",
+    "secondDart": "T15",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 146,
+    "firstDart": "T20",
+    "secondDart": "T18",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 147,
+    "firstDart": "T20",
+    "secondDart": "T17",
+    "thirdDart": "D18"
+  },
+  {
+    "score": 148,
+    "firstDart": "T20",
+    "secondDart": "T16",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 149,
+    "firstDart": "T20",
+    "secondDart": "T19",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 150,
+    "firstDart": "T20",
+    "secondDart": "T18",
+    "thirdDart": "D18"
+  },
+  {
+    "score": 151,
+    "firstDart": "T20",
+    "secondDart": "T17",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 152,
+    "firstDart": "T20",
+    "secondDart": "T20",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 153,
+    "firstDart": "T20",
+    "secondDart": "T19",
+    "thirdDart": "D18"
+  },
+  {
+    "score": 154,
+    "firstDart": "T20",
+    "secondDart": "T18",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 155,
+    "firstDart": "T20",
+    "secondDart": "T19",
+    "thirdDart": "D19"
+  },
+  {
+    "score": 156,
+    "firstDart": "T20",
+    "secondDart": "T20",
+    "thirdDart": "D18"
+  },
+  {
+    "score": 157,
+    "firstDart": "T20",
+    "secondDart": "T19",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 158,
+    "firstDart": "T20",
+    "secondDart": "T20",
+    "thirdDart": "D19"
+  },
+  {
+    "score": 159,
+    "firstDart": "T19",
+    "secondDart": "T10",
+    "thirdDart": "D16"
+  },
+  {
+    "score": 160,
+    "firstDart": "T20",
+    "secondDart": "T20",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 161,
+    "firstDart": "T20",
+    "secondDart": "T17",
+    "thirdDart": "Bull"
+  },
+  {
+    "score": 162,
+    "firstDart": "T18",
+    "secondDart": "T20",
+    "thirdDart": "D4"
+  },
+  {
+    "score": 163,
+    "firstDart": "T19",
+    "secondDart": "T16",
+    "thirdDart": "D9"
+  },
+  {
+    "score": 164,
+    "firstDart": "T20",
+    "secondDart": "T18",
+    "thirdDart": "Bull"
+  },
+  {
+    "score": 165,
+    "firstDart": "25",
+    "secondDart": "T20",
+    "thirdDart": "D20"
+  },
+  {
+    "score": 166,
+    "firstDart": "T19",
+    "secondDart": "T19",
+    "thirdDart": "D6"
+  },
+  {
+    "score": 167,
+    "firstDart": "T20",
+    "secondDart": "T19",
+    "thirdDart": "Bull"
+  },
+  {
+    "score": 168,
+    "firstDart": "-No out-",
+    "secondDart": null,
+    "thirdDart": null
+  },
+  {
+    "score": 169,
+    "firstDart": "-No out-",
+    "secondDart": null,
+    "thirdDart": null
+  },
+  {
+    "score": 170,
+    "firstDart": "T20",
+    "secondDart": "T20",
+    "thirdDart": "Bull"
+  }
+]
