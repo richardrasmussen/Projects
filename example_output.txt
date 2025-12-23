@@ -1,0 +1,67 @@
+Testing DraftKings Scraper with Mock Data
+================================================================================
+
+1. Testing parse_odds() method...
+   Successfully parsed 2 events
+
+2. Testing text formatting...
+================================================================================
+DRAFTKINGS BETTING ODDS
+================================================================================
+
+Event: Kansas City Chiefs vs Buffalo Bills
+Start Time: 2025-12-24T18:00:00Z
+Event ID: 123456
+
+  Market: Moneyline
+    Kansas City Chiefs: -150 (Decimal: 1.67)
+    Buffalo Bills: +130 (Decimal: 2.30)
+
+  Market: Point Spread
+    Kansas City Chiefs (-3.5): -110 (Decimal: 1.91)
+    Buffalo Bills (+3.5): -110 (Decimal: 1.91)
+
+  Market: Total Points
+    Over (47.5): -110 (Decimal: 1.91)
+    Under (47.5): -110 (Decimal: 1.91)
+--------------------------------------------------------------------------------
+
+Event: Los Angeles Lakers vs Boston Celtics
+Start Time: 2025-12-24T20:30:00Z
+Event ID: 123457
+
+  Market: Moneyline
+    Los Angeles Lakers: +120 (Decimal: 2.20)
+    Boston Celtics: -140 (Decimal: 1.71)
+--------------------------------------------------------------------------------
+
+3. Testing JSON formatting...
+JSON Output (first 500 characters):
+[
+  {
+    "event_id": 123456,
+    "name": "Kansas City Chiefs vs Buffalo Bills",
+    "start_time": "2025-12-24T18:00:00Z",
+    "markets": [
+      {
+        "name": "Moneyline",
+        "outcomes": [
+          {
+            "label": "Kansas City Chiefs",
+            "odds": "-150",
+            "odds_decimal": "1.67",
+            "line": null
+          },
+          {
+            "label": "Buffalo Bills",
+            "odds": "+130",
+            "odds_decimal": "2.30",
+            "line": null
+     ...
+
+4. Verifying parsed data structure...
+   ✓ All data structure checks passed!
+
+================================================================================
+TEST PASSED - Scraper logic works correctly!
+================================================================================
