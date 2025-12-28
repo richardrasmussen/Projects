@@ -1,0 +1,258 @@
+/* Global Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    overflow: hidden;
+}
+
+html, body {
+    height: 100%;
+}
+
+/* Control Panel */
+.control-panel {
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    border-right: 1px solid #dee2e6;
+}
+
+.control-panel h5 {
+    color: #0d6efd;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #0d6efd;
+}
+
+/* Map Container */
+#map {
+    height: calc(100vh - 56px);
+    width: 100%;
+    position: relative;
+}
+
+/* Data Panel */
+.data-panel {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    max-width: 350px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.data-panel.active {
+    display: block;
+}
+
+.data-item {
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.data-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.data-label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.85rem;
+}
+
+.data-value {
+    color: #212529;
+    font-size: 1.1rem;
+}
+
+/* Legend */
+.legend {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    z-index: 1000;
+    min-width: 200px;
+}
+
+.legend h6 {
+    margin: 0 0 10px 0;
+    font-weight: 600;
+    color: #212529;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.legend-color {
+    width: 30px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 3px;
+}
+
+.legend-label {
+    font-size: 0.85rem;
+    color: #495057;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+/* Leaflet Marker Customization */
+.weather-marker {
+    background: white;
+    border: 2px solid #0d6efd;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Leaflet Popup Customization */
+.leaflet-popup-content-wrapper {
+    border-radius: 8px;
+}
+
+.leaflet-popup-content {
+    margin: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .control-panel {
+        height: auto;
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+
+    #map {
+        height: 50vh;
+    }
+
+    .data-panel {
+        bottom: 10px;
+        right: 10px;
+        max-width: calc(100% - 20px);
+    }
+
+    .legend {
+        top: 10px;
+        right: 10px;
+        max-width: 150px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Form Controls Enhancement */
+.form-label.fw-bold {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.btn-sm {
+    font-size: 0.85rem;
+}
+
+/* Navbar Link */
+.navbar a {
+    text-decoration: underline;
+}
+
+.navbar a:hover {
+    opacity: 0.8;
+}
+
+/* Weather Code Icons */
+.weather-icon {
+    font-size: 2rem;
+    margin: 10px 0;
+}
+
+/* Error Message */
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    border: 1px solid #f5c6cb;
+}
+
+/* Success Message */
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    border: 1px solid #c3e6cb;
+}
+
+/* Temperature Gradient Colors */
+.temp-very-cold { background: linear-gradient(to right, #0000ff, #4169e1); }
+.temp-cold { background: linear-gradient(to right, #4169e1, #87ceeb); }
+.temp-cool { background: linear-gradient(to right, #87ceeb, #90ee90); }
+.temp-mild { background: linear-gradient(to right, #90ee90, #ffff00); }
+.temp-warm { background: linear-gradient(to right, #ffff00, #ffa500); }
+.temp-hot { background: linear-gradient(to right, #ffa500, #ff4500); }
+.temp-very-hot { background: linear-gradient(to right, #ff4500, #8b0000); }
+
+/* Precipitation Colors */
+.precip-none { background: #ffffff; }
+.precip-light { background: #b3e5fc; }
+.precip-moderate { background: #4fc3f7; }
+.precip-heavy { background: #0288d1; }
+.precip-very-heavy { background: #01579b; }
+
+/* Wind Speed Colors */
+.wind-calm { background: #e8f5e9; }
+.wind-light { background: #81c784; }
+.wind-moderate { background: #ffa726; }
+.wind-strong { background: #ef5350; }
+.wind-very-strong { background: #c62828; }
+
+/* Cloud Cover Colors */
+.cloud-clear { background: #e3f2fd; }
+.cloud-few { background: #90caf9; }
+.cloud-scattered { background: #64b5f6; }
+.cloud-broken { background: #42a5f5; }
+.cloud-overcast { background: #1976d2; }
+
+/* Humidity Colors */
+.humidity-low { background: #fff8e1; }
+.humidity-moderate { background: #ffcc80; }
+.humidity-high { background: #ff9800; }
+.humidity-very-high { background: #ef6c00; }
