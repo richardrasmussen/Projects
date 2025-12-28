@@ -24,7 +24,7 @@
             <span class="navbar-brand mb-0 h1">🌤️ Interactive Weather Maps - North America</span>
             <div class="d-flex align-items-center">
                 <span id="demoModeIndicator" class="badge bg-warning text-dark me-2 d-none">DEMO MODE</span>
-                <span class="text-white small">Data from <a href="https://open-meteo.com/" target="_blank" class="text-white">Open-Meteo API</a></span>
+                <span class="text-white small">Data from <a href="https://open-meteo.com/" target="_blank" class="text-white">Open-Meteo API</a> &amp; <a href="https://www.windy.com/" target="_blank" class="text-white">Windy</a></span>
             </div>
         </div>
     </nav>
@@ -34,6 +34,17 @@
             <!-- Left Panel - Controls -->
             <div class="col-md-3 col-lg-2 bg-light p-3 control-panel">
                 <h5>Controls</h5>
+                
+                <!-- Animated Overlay Toggle -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Display Mode</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="animatedOverlayToggle">
+                        <label class="form-check-label" for="animatedOverlayToggle">
+                            Animated Overlays
+                        </label>
+                    </div>
+                </div>
                 
                 <!-- Data Mode Toggle -->
                 <div class="mb-3">
@@ -113,6 +124,30 @@
                     </div>
                 </div>
 
+                <!-- Animation Controls (visible only when animated overlays enabled) -->
+                <div id="animationControls" class="mb-3 d-none">
+                    <label class="form-label fw-bold">Animation Layer</label>
+                    <select class="form-select form-select-sm mb-2" id="windyLayer">
+                        <option value="wind">Wind</option>
+                        <option value="temp">Temperature</option>
+                        <option value="rain">Rain/Precipitation</option>
+                        <option value="clouds">Clouds</option>
+                        <option value="pressure">Pressure</option>
+                        <option value="waves">Waves</option>
+                    </select>
+                    
+                    <div class="btn-group w-100 mb-2" role="group">
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="playPauseBtn">
+                            <span id="playPauseIcon">▶</span> Play
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="stopAnimationBtn">
+                            ⏹ Stop
+                        </button>
+                    </div>
+                    
+                    <small class="text-muted d-block">Animated overlays show forecast data</small>
+                </div>
+
                 <!-- Update Button -->
                 <button id="updateMap" class="btn btn-primary w-100 mb-2">
                     <span id="updateButtonText">Update Map</span>
@@ -125,8 +160,11 @@
 
             <!-- Main Content Area -->
             <div class="col-md-9 col-lg-10 p-0">
-                <!-- Map Container -->
+                <!-- Map Container - Leaflet (Static Mode) -->
                 <div id="map"></div>
+                
+                <!-- Windy Map Container (Animated Mode) -->
+                <div id="windyMap" class="d-none"></div>
 
                 <!-- Data Panel -->
                 <div class="data-panel" id="dataPanel">
@@ -165,6 +203,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
             crossorigin="anonymous"></script>
+    
+    <!-- Windy API -->
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <script src="https://api.windy.com/assets/map-forecast/libBoot.js"></script>
     
     <!-- Custom JS -->
     <script src="map.js"></script>
