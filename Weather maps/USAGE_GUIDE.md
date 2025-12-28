@@ -24,6 +24,32 @@
    http://localhost:8000/index.html?demo=true
    ```
 
+## Display Modes
+
+### Static Mode (Default)
+
+The application starts in static mode, which provides:
+- Precise numerical data from Open-Meteo API
+- Support for both current and historical data
+- Color-coded legend for visual reference
+- Interactive markers for multiple locations
+
+### Animated Overlay Mode
+
+Enable animated overlays for:
+- Beautiful weather visualizations
+- Particle animations for wind patterns
+- Real-time forecast data
+- Multiple weather layers
+
+**To Enable:**
+1. Toggle the "Animated Overlays" switch in the control panel
+2. The map will switch to Windy's animated view
+3. Select your desired animation layer (Wind, Temperature, Rain, etc.)
+4. Use Play/Pause/Stop controls to manage the timeline
+
+**Note:** Animated overlays show forecast data only. For historical data analysis, use static mode.
+
 ## Basic Usage
 
 ### Viewing Current Weather Data
@@ -38,8 +64,9 @@
 3. **Click anywhere on the map** to fetch weather data
    - A marker will appear at the clicked location
    - Weather data will display in the data panel
+   - Works in both static and animated modes
 
-4. **View the legend** to understand the color coding for the selected parameter
+4. **View the legend** (in static mode) to understand the color coding for the selected parameter
 
 ### Viewing Historical Weather Data
 
@@ -61,9 +88,51 @@
 
 ## Advanced Features
 
+### Using Animated Weather Overlays
+
+**Purpose:** Visualize weather patterns with beautiful animations showing forecast data.
+
+**Steps:**
+
+1. **Enable Animated Mode**
+   - Toggle the "Animated Overlays" switch
+   - The map transitions from static to animated view
+   - Animation controls become visible
+
+2. **Select Weather Layer**
+   - Choose from the "Animation Layer" dropdown:
+     - **Wind** - Particle flow showing wind patterns and direction
+     - **Temperature** - Color gradients showing temperature distribution
+     - **Rain/Precipitation** - Animated precipitation forecasts
+     - **Clouds** - Cloud coverage and movement
+     - **Pressure** - Atmospheric pressure systems
+     - **Waves** - Ocean wave patterns (coastal areas)
+
+3. **Control the Animation**
+   - **Play**: Start the forecast timeline animation
+   - **Pause**: Freeze at the current forecast time
+   - **Stop**: Reset to current time
+   - Use Windy's built-in time slider (appears on map) to scrub through forecast
+
+4. **Interact with Data**
+   - Click anywhere on the animated map to fetch numerical data
+   - Data panel shows precise values from Open-Meteo API
+   - Markers still work in animated mode
+
+5. **Switch Back to Static Mode**
+   - Toggle off "Animated Overlays"
+   - Returns to traditional map view
+   - Map view position is preserved
+
+**Tips:**
+- Animated overlays work best with "Current" data mode
+- For historical data, disable animated overlays
+- Weather parameter selection auto-syncs with animation layer when possible
+- Both modes use the same numerical data source (Open-Meteo)
+
 ### Comparing Multiple Locations
 
-1. Click on multiple locations on the map
+1. Click on multiple locations on the map (works in both modes)
 2. Each click adds a new marker
 3. The data panel updates to show the most recent location
 4. All markers remain visible for comparison
@@ -118,18 +187,38 @@ Try each parameter to understand different weather conditions:
 4. Click on multiple locations
 5. Compare historical conditions
 
-### 3. Storm Tracking
+### 3. Visualizing Weather Systems with Animated Overlays
+
+**Scenario:** Watch how weather systems move and develop over time
+
+**Steps:**
+1. Enable "Animated Overlays"
+2. Select "Wind" layer to see air circulation patterns
+3. Click **Play** to watch the forecast animation
+4. Switch to "Pressure" layer to identify high/low pressure systems
+5. Switch to "Rain" to see where precipitation is forecasted
+6. Click on specific locations to get numerical forecasts
+7. Use time slider to jump to specific forecast times
+
+**Best For:**
+- Understanding storm movement
+- Predicting weather changes
+- Visualizing jet streams and wind patterns
+- Planning outdoor activities
+
+### 4. Storm Tracking (Static Mode)
 
 **Scenario:** Monitor precipitation and wind during a weather event
 
 **Steps:**
-1. Select "Precipitation" parameter
-2. Click on areas of interest
-3. Check legend for precipitation levels
-4. Switch to "Wind Speed" to see wind patterns
-5. Switch to "Pressure (Sea Level)" to identify pressure systems
+1. Disable animated overlays for precise data
+2. Select "Precipitation" parameter
+3. Click on areas of interest
+4. Check legend for precipitation levels
+5. Switch to "Wind Speed" to see wind patterns
+6. Switch to "Pressure (Sea Level)" to identify pressure systems
 
-### 4. Temperature Gradient Analysis
+### 5. Temperature Gradient Analysis
 
 **Scenario:** Understand temperature variations across regions
 
@@ -139,8 +228,9 @@ Try each parameter to understand different weather conditions:
 3. Observe temperature changes with latitude
 4. Check legend for temperature ranges
 5. Compare with "Apparent Temperature" for perceived warmth
+6. **Bonus:** Enable animated overlays to see temperature movement
 
-### 5. Historical Climate Research
+### 6. Historical Climate Research
 
 **Scenario:** Study long-term weather patterns
 
@@ -155,9 +245,18 @@ Try each parameter to understand different weather conditions:
 
 ### Efficient Navigation
 
-- **Zoom In/Out:** Use mouse wheel or pinch gestures
-- **Pan:** Click and drag the map
+- **Zoom In/Out:** Use mouse wheel or pinch gestures (works in both modes)
+- **Pan:** Click and drag the map (works in both modes)
 - **Reset View:** Refresh the page to return to default North America view
+- **Mode Switching:** View position is preserved when toggling between static and animated modes
+
+### Working with Animated Overlays
+
+- **Best Layers:** Wind and Rain provide the most dramatic animations
+- **Forecast Range:** Windy typically shows 10-day forecasts
+- **Time Control:** Use the time slider at the bottom of the map (appears in animated mode)
+- **Data Accuracy:** Click on map to get precise numerical values while viewing animations
+- **Performance:** Disable animations on slower devices by using static mode
 
 ### Data Interpretation
 

@@ -2,17 +2,47 @@
 
 ## Overview
 
-The Weather Maps application provides two PHP API endpoints for retrieving weather data:
+The Weather Maps application integrates multiple data sources and provides a dual-mode visualization system:
+
+### Data Sources
+- **Open-Meteo API** - Provides numerical weather data via PHP proxy endpoints
+- **Windy API** - Provides animated weather visualizations directly in the browser
+
+### API Endpoints (PHP Backend)
 - **api.php** - Production endpoint that proxies requests to Open-Meteo API
 - **api-demo.php** - Demo endpoint that generates simulated weather data for testing
 
-## API Endpoints
+### Client-Side APIs
+- **Windy API v3** - Integrated directly in the browser for animated overlays
+  - No server-side proxy required
+  - API Key: Pre-configured in `map.js`
+  - Used only when animated overlay mode is enabled
+
+## Dual-Mode System
+
+### Static Mode (Default)
+- Uses Leaflet.js for map rendering
+- Fetches numerical data from PHP backend (api.php)
+- Supports both current and historical data
+- Shows color-coded legend
+- Allows precise data point collection
+
+### Animated Mode
+- Uses Windy API for map rendering and animations
+- Still fetches numerical data from PHP backend (api.php) when user clicks on map
+- Shows forecast animations only (no historical data animations)
+- Provides visual weather patterns and movement
+- Includes built-in timeline controls
+
+## PHP API Endpoints
 
 ### 1. Production API (api.php)
 
 **Base URL:** `api.php`
 
 **Method:** GET
+
+**Purpose:** Proxy requests to Open-Meteo API for numerical weather data. Used in both static and animated modes when fetching point data.
 
 **Parameters:**
 
@@ -178,14 +208,83 @@ GET api-demo.php?latitude=45.5&longitude=-122.7&parameter=precipitation&mode=cur
 
 ## Rate Limiting
 
-### Production API
+### Production API (Open-Meteo)
 The production API proxies to Open-Meteo which has the following limits:
 - **Non-commercial:** 10,000 API calls per day
 - **No API key required** for basic usage
 - Requests are throttled automatically by Open-Meteo
 
+### Windy API
+The Windy API has its own rate limits:
+- **API Key:** Pre-configured in application
+- **Free tier:** Generous limits for personal/testing use
+- **Attribution:** Required (automatically included via Windy library)
+- **Documentation:** https://api.windy.com/
+
 ### Demo API
 No rate limiting on the demo API as it generates data locally.
+
+## Windy API Integration
+
+### Configuration
+
+The Windy API key is configured in `map.js`:
+```javascript
+const WINDY_API_KEY = 'VUlmt9CjBWsehQomhqHyFscMbw3dGMCX';
+```
+
+**To update the API key:**
+1. Open `map.js`
+2. Locate the `WINDY_API_KEY` constant (approximately line 16)
+3. Replace with your own API key from https://api.windy.com/
+
+### Initialization
+
+Windy is initialized when user enables animated overlays:
+```javascript
+function initWindyMap() {
+    const options = {
+        key: WINDY_API_KEY,
+        lat: 45.0,
+        lon: -95.0,
+        zoom: 4
+    };
+    windyInit(options, windyAPIReady);
+}
+```
+
+### Available Layers
+
+The application supports these Windy layers:
+- `wind` - Wind particle animations
+- `temp` - Temperature gradients
+- `rain` - Precipitation forecasts
+- `clouds` - Cloud coverage
+- `pressure` - Pressure systems
+- `waves` - Ocean waves
+
+### Layer Mapping
+
+Weather parameters are automatically mapped to Windy layers:
+```javascript
+const parameterToWindyLayer = {
+    'temperature_2m': 'temp',
+    'wind_speed_10m': 'wind',
+    'wind_direction_10m': 'wind',
+    'precipitation': 'rain',
+    'rain': 'rain',
+    'cloud_cover': 'clouds',
+    'pressure_msl': 'pressure'
+};
+```
+
+### Animation Controls
+
+The application provides controls for Windy animations:
+- **Play/Pause:** Toggle timeline animation
+- **Stop:** Reset to current time
+- **Layer Selection:** Switch between weather phenomena
+- **Time Scrubber:** Windy's built-in timeline control (appears at bottom of map)
 
 ## Error Handling
 
