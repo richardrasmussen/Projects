@@ -12,6 +12,10 @@ let animatedOverlayMode = false; // Track if animated overlays are enabled
 let isAnimationPlaying = false;
 
 // Windy API Configuration
+// Note: Windy API is a client-side API, so the key is safely exposed in the browser.
+// This is the standard way to use Windy API. For production, consider using environment
+// variables or a build-time configuration to manage the key.
+// The key can be updated here or replaced during build: https://api.windy.com/
 const WINDY_API_KEY = 'VUlmt9CjBWsehQomhqHyFscMbw3dGMCX';
 
 // Mapping between weather parameters and Windy layers
@@ -259,6 +263,15 @@ function initMap() {
 
 // Initialize Windy Map
 function initWindyMap() {
+    // Check if Windy API is loaded
+    if (typeof windyInit === 'undefined') {
+        console.error('Windy API not loaded. Falling back to static mode.');
+        showTemporaryMessage('Animated overlays unavailable. Windy API failed to load.');
+        // Reset toggle
+        document.getElementById('animatedOverlayToggle').checked = false;
+        return;
+    }
+    
     showLoading(true);
     
     const options = {
@@ -352,20 +365,18 @@ function togglePlayPause() {
     
     const { store } = windyAPI;
     const playPauseBtn = document.getElementById('playPauseBtn');
-    const playPauseIcon = document.getElementById('playPauseIcon');
     
     if (isAnimationPlaying) {
-        // Pause
-        store.set('timestamp', store.get('timestamp')); // Stops animation
+        // Pause - Disable timeline animation
+        // Note: Windy API uses store.set('play', false) to pause the timeline
+        store.set('play', false);
         isAnimationPlaying = false;
-        playPauseIcon.textContent = '▶';
-        playPauseBtn.innerHTML = '<span id="playPauseIcon">▶</span> Play';
+        playPauseBtn.textContent = '▶ Play';
     } else {
         // Play
         store.set('play', true);
         isAnimationPlaying = true;
-        playPauseIcon.textContent = '⏸';
-        playPauseBtn.innerHTML = '<span id="playPauseIcon">⏸</span> Pause';
+        playPauseBtn.textContent = '⏸ Pause';
     }
 }
 
@@ -378,7 +389,7 @@ function stopAnimation() {
     isAnimationPlaying = false;
     
     const playPauseBtn = document.getElementById('playPauseBtn');
-    playPauseBtn.innerHTML = '<span id="playPauseIcon">▶</span> Play';
+    playPauseBtn.textContent = '▶ Play';
 }
 
 // Show temporary message
@@ -386,10 +397,26 @@ function showTemporaryMessage(message) {
     const messageDiv = document.createElement('div');
     messageDiv.className = 'alert alert-info alert-dismissible fade show position-fixed top-50 start-50 translate-middle';
     messageDiv.style.zIndex = '9999';
-    messageDiv.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
+    
+    // Safely set text content to avoid XSS
+    messageDiv.textContent = message;
+    
+    // Create and append close button
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'btn-close';
+    closeBtn.setAttribute('data-bs-dismiss', 'alert');
+    closeBtn.setAttribute('aria-label', 'Close');
+    
+    // Add manual click handler as fallback if Bootstrap isn't ready
+    closeBtn.addEventListener('click', () => {
+        if (messageDiv.parentNode) {
+            messageDiv.remove();
+        }
+    });
+    
+    messageDiv.appendChild(closeBtn);
+    
     document.body.appendChild(messageDiv);
     
     setTimeout(() => {
