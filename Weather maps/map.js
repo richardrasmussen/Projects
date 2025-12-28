@@ -5,6 +5,20 @@ let currentLayer = null;
 let currentDataMode = 'current';
 let currentWeatherParam = 'temperature_2m';
 let currentUnits = 'metric';
+let demoMode = false; // Set to true to use demo data without external API
+
+// Check if demo mode should be enabled from URL parameter
+if (window.location.search.includes('demo=true')) {
+    demoMode = true;
+    console.log('Demo mode enabled - using simulated data');
+    // Show demo mode indicator
+    document.addEventListener('DOMContentLoaded', () => {
+        const indicator = document.getElementById('demoModeIndicator');
+        if (indicator) {
+            indicator.classList.remove('d-none');
+        }
+    });
+}
 
 // Weather parameter configurations
 const weatherParams = {
@@ -304,6 +318,8 @@ async function onMapClick(e) {
 
 // Fetch weather data from API
 async function fetchWeatherData(lat, lon) {
+    const apiEndpoint = demoMode ? 'api-demo.php' : 'api.php';
+    
     const params = new URLSearchParams({
         latitude: lat,
         longitude: lon,
@@ -317,7 +333,7 @@ async function fetchWeatherData(lat, lon) {
         params.append('hour', document.getElementById('timeInput').value);
     }
 
-    const response = await fetch(`api.php?${params.toString()}`);
+    const response = await fetch(`${apiEndpoint}?${params.toString()}`);
     
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

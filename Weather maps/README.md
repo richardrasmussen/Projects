@@ -119,6 +119,12 @@ Then open your browser and navigate to:
 http://localhost:8000/index.html
 ```
 
+**Demo Mode (for testing without API access):**
+```
+http://localhost:8000/index.html?demo=true
+```
+This will use simulated weather data instead of calling the external Open-Meteo API.
+
 ### Option 2: Using Apache/Nginx (Production)
 
 1. Place the `Weather maps/` directory in your web server's document root (e.g., `/var/www/html/` for Apache)
@@ -165,6 +171,7 @@ Weather maps/
 ├── styles.css          # Custom CSS styling
 ├── map.js              # JavaScript for map interactions
 ├── api.php             # PHP API proxy for Open-Meteo
+├── api-demo.php        # Demo data generator (for testing)
 └── README.md           # This file
 ```
 
@@ -208,9 +215,11 @@ Tested and working on:
 
 **Problem**: Map doesn't load
 - **Solution**: Check internet connection and ensure CDN resources are accessible
+- **Alternative**: Use demo mode by adding `?demo=true` to the URL
 
 **Problem**: "Failed to fetch data" error
 - **Solution**: Verify PHP can make external HTTP requests (`allow_url_fopen` enabled)
+- **Alternative**: Use demo mode for testing: `http://localhost:8000/index.html?demo=true`
 
 **Problem**: Historical data returns errors
 - **Solution**: Ensure selected date is between 1940-01-01 and yesterday
