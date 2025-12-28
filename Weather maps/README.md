@@ -172,8 +172,16 @@ Weather maps/
 ├── map.js              # JavaScript for map interactions
 ├── api.php             # PHP API proxy for Open-Meteo
 ├── api-demo.php        # Demo data generator (for testing)
-└── README.md           # This file
+├── README.md           # This file
+├── API_DOCS.md         # Detailed API documentation
+└── USAGE_GUIDE.md      # Comprehensive usage guide
 ```
+
+## Documentation
+
+- **[README.md](README.md)** - Overview, setup, and quick start (this file)
+- **[API_DOCS.md](API_DOCS.md)** - Complete API reference, parameters, and examples
+- **[USAGE_GUIDE.md](USAGE_GUIDE.md)** - Detailed usage instructions and use cases
 
 ## API Usage Notes
 
