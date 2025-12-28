@@ -1,14 +1,33 @@
 # Interactive Weather Maps - North America
 
-A comprehensive PHP web application that displays interactive weather maps for North America using real-time and historical data from the Open-Meteo API.
+A comprehensive PHP web application that displays interactive weather maps for North America using real-time and historical data from the Open-Meteo API, with animated weather overlays powered by Windy API.
 
 ## Features
 
+### 🎬 Animated Weather Overlays (NEW!)
+- **Windy API Integration** - Beautiful animated weather visualizations
+- **Toggle Display Mode** - Switch between static data view and animated overlays
+- **Multiple Animation Layers**:
+  - Wind patterns with particle animations
+  - Temperature gradients
+  - Rain/Precipitation forecasts
+  - Cloud coverage
+  - Atmospheric pressure systems
+  - Ocean waves (for coastal areas)
+- **Animation Controls**:
+  - Play/Pause functionality
+  - Stop button to reset timeline
+  - Layer selector to choose which weather phenomenon to visualize
+- **Seamless Integration** - Both modes share the same numerical data capabilities
+
 ### 🗺️ Interactive Map
-- **Leaflet.js-powered** interactive map centered on North America
-- Click anywhere on the map to fetch weather data for that location
+- **Dual-Mode System**:
+  - **Static Mode**: Leaflet.js-powered map with Open-Meteo data
+  - **Animated Mode**: Windy-powered map with live weather animations
+- Click anywhere on the map to fetch weather data for that location (works in both modes)
 - Pan and zoom capabilities to explore different regions
 - Visual markers showing selected locations with weather values
+- Smooth transitions between static and animated modes
 
 ### 🌡️ Weather Parameters
 Support for multiple weather parameters including:
@@ -42,6 +61,11 @@ Support for multiple weather parameters including:
 - **Multiple Markers** - Add multiple data points and compare
 
 ### ⚙️ User Controls
+- **Display Mode Toggle** - Switch between static data view and animated overlays
+- **Animation Controls** (when animated mode is enabled):
+  - Layer selector for different weather phenomena
+  - Play/Pause button for timeline control
+  - Stop button to reset animation
 - **Unit Toggle** - Switch between Metric and Imperial units
   - Temperature: °C / °F
   - Wind Speed: km/h / mph
@@ -50,6 +74,7 @@ Support for multiple weather parameters including:
 - **Parameter Selector** - Dropdown menu to choose weather parameter
 - **Date/Time Picker** - Select historical date and hour (UTC)
 - **Clear Markers** - Remove all markers from the map
+- **Synchronized Controls** - Weather parameter selection automatically syncs with animation layer when applicable
 
 ### 🎨 User Interface
 - Clean, modern design using Bootstrap 5
@@ -64,7 +89,8 @@ Support for multiple weather parameters including:
 - **HTML5** - Semantic markup
 - **CSS3** - Custom styling with responsive design
 - **JavaScript (ES6+)** - Interactive functionality
-- **Leaflet.js 1.9.4** - Interactive mapping library
+- **Leaflet.js 1.9.4** - Interactive mapping library (static mode)
+- **Windy API v3** - Animated weather overlays (animated mode)
 - **Bootstrap 5.3.2** - UI framework
 
 ### Backend
@@ -76,6 +102,9 @@ Support for multiple weather parameters including:
 ### APIs
 - **Open-Meteo Forecast API** - Current weather data
 - **Open-Meteo Archive API** - Historical weather data (1940-present)
+- **Windy API** - Animated weather visualizations and forecasts
+  - API Key: Pre-configured (can be updated in map.js)
+  - Provides real-time animated overlays for multiple weather parameters
 
 ## Setup Instructions
 
@@ -145,23 +174,36 @@ This will use simulated weather data instead of calling the external Open-Meteo 
 ### Basic Usage
 
 1. **Open the application** in your web browser
-2. The map will load centered on North America
-3. **Select a weather parameter** from the dropdown menu (default is Temperature)
-4. **Choose data mode**:
+2. The map will load centered on North America in static mode
+3. **Toggle Animated Overlays**: Use the "Animated Overlays" switch to enable animated weather visualizations
+4. **Select a weather parameter** from the dropdown menu (default is Temperature)
+5. **Choose data mode**:
    - **Current**: Click "Current" button for real-time data
-   - **Historical**: Click "Historical" button and select a date/time
-5. **Click anywhere on the map** to fetch weather data for that location
-6. View the data in the **Data Panel** on the right
-7. Add multiple markers by clicking different locations
-8. **Clear markers** using the "Clear Markers" button
+   - **Historical**: Click "Historical" button and select a date/time (Note: animated overlays show forecast data only)
+6. **Click anywhere on the map** to fetch weather data for that location (works in both modes)
+7. View the data in the **Data Panel** on the right
+8. Add multiple markers by clicking different locations
+9. **Clear markers** using the "Clear Markers" button
+
+### Using Animated Overlays
+
+1. **Enable Animated Mode**: Toggle the "Animated Overlays" switch in the control panel
+2. **Select Animation Layer**: Choose from Wind, Temperature, Rain, Clouds, Pressure, or Waves
+3. **Control Playback**:
+   - Click **Play** to start the animation timeline
+   - Click **Pause** to freeze at current time
+   - Click **Stop** to reset to current time
+4. **Interact with Map**: Click anywhere to fetch numerical data while viewing animations
+5. **Switch Back**: Toggle off "Animated Overlays" to return to static mode with full historical data access
 
 ### Advanced Features
 
-- **Change Units**: Toggle between Metric and Imperial units
+- **Change Units**: Toggle between Metric and Imperial units (works in both modes)
 - **Explore Different Parameters**: Use the dropdown to switch between temperature, precipitation, wind, etc.
-- **Historical Analysis**: Select past dates to analyze historical weather patterns
+- **Synchronized Layers**: When selecting compatible weather parameters, the animation layer auto-updates
+- **Historical Analysis**: Disable animated overlays and select past dates to analyze historical weather patterns
 - **Pan and Zoom**: Use mouse or touch gestures to explore different regions
-- **View Legend**: Check the color-coded legend to understand value ranges
+- **View Legend**: Check the color-coded legend (in static mode) to understand value ranges
 
 ## File Structure
 
@@ -192,12 +234,22 @@ This application uses the Open-Meteo API, which is:
 - **No API key required**
 - **Attribution required** (included in the navbar)
 
+### Windy API
+
+The animated overlays are powered by Windy API:
+- **API Key**: Pre-configured in the application (`VUlmt9CjBWsehQomhqHyFscMbw3dGMCX`)
+- **How to Update API Key**: Edit the `WINDY_API_KEY` constant in `map.js` (line ~16)
+- **Attribution**: Automatically included via Windy's library
+- **Features**: Provides animated forecast visualizations for multiple weather parameters
+- **Rate Limits**: Generous limits for non-commercial use. See [Windy API Documentation](https://api.windy.com/) for details
+
 ### Rate Limits
 
 - Open-Meteo has generous rate limits for non-commercial use
+- Windy API provides ample quota for testing and personal projects
 - For high-traffic applications, consider:
   - Implementing caching mechanisms
-  - Using Open-Meteo's commercial plans
+  - Using commercial plans from providers
   - Adding request throttling
 
 ### Data Coverage
@@ -225,15 +277,25 @@ Tested and working on:
 - **Solution**: Check internet connection and ensure CDN resources are accessible
 - **Alternative**: Use demo mode by adding `?demo=true` to the URL
 
+**Problem**: Animated overlays don't appear
+- **Solution**: Ensure Windy API can be accessed. Check browser console for errors
+- **Fallback**: The application will automatically fall back to static mode if Windy fails to load
+- **API Key**: Verify the Windy API key is valid in `map.js`
+
 **Problem**: "Failed to fetch data" error
 - **Solution**: Verify PHP can make external HTTP requests (`allow_url_fopen` enabled)
 - **Alternative**: Use demo mode for testing: `http://localhost:8000/index.html?demo=true`
 
 **Problem**: Historical data returns errors
 - **Solution**: Ensure selected date is between 1940-01-01 and yesterday
+- **Note**: Animated overlays only work with forecast data, not historical data
 
 **Problem**: No data for selected location
 - **Solution**: Some parameters may not be available for all locations/times
+
+**Problem**: Animation controls not responding
+- **Solution**: Ensure animated overlays mode is enabled via the toggle switch
+- **Check**: Verify you're in "Current" data mode (animated overlays show forecast data)
 
 ### Debug Mode
 
@@ -244,7 +306,7 @@ To enable error display in PHP (for development only):
 ## Future Enhancements
 
 Potential improvements:
-- [ ] Animated weather layer overlays
+- [x] Animated weather layer overlays
 - [ ] Time series charts for selected locations
 - [ ] Weather forecast data (future predictions)
 - [ ] Export data to CSV/JSON
@@ -256,6 +318,7 @@ Potential improvements:
 ## Credits
 
 - **Weather Data**: [Open-Meteo](https://open-meteo.com/)
+- **Animated Overlays**: [Windy](https://www.windy.com/)
 - **Mapping Library**: [Leaflet.js](https://leafletjs.com/)
 - **UI Framework**: [Bootstrap](https://getbootstrap.com/)
 - **Base Maps**: [OpenStreetMap](https://www.openstreetmap.org/)

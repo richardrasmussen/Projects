@@ -31,6 +31,13 @@ html, body {
     position: relative;
 }
 
+/* Windy Map Container */
+#windyMap {
+    height: calc(100vh - 56px);
+    width: 100%;
+    position: relative;
+}
+
 /* Data Panel */
 .data-panel {
     position: absolute;

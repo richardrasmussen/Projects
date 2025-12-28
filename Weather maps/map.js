@@ -1,11 +1,34 @@
 // Global Variables
 let map;
+let windyMap = null;
+let windyAPI = null;
 let markers = [];
 let currentLayer = null;
 let currentDataMode = 'current';
 let currentWeatherParam = 'temperature_2m';
 let currentUnits = 'metric';
 let demoMode = false; // Set to true to use demo data without external API
+let animatedOverlayMode = false; // Track if animated overlays are enabled
+let isAnimationPlaying = false;
+
+// Windy API Configuration
+// Note: Windy API is a client-side API, so the key is safely exposed in the browser.
+// This is the standard way to use Windy API. For production, consider using environment
+// variables or a build-time configuration to manage the key.
+// The key can be updated here or replaced during build: https://api.windy.com/
+const WINDY_API_KEY = 'VUlmt9CjBWsehQomhqHyFscMbw3dGMCX';
+
+// Mapping between weather parameters and Windy layers
+const parameterToWindyLayer = {
+    'temperature_2m': 'temp',
+    'wind_speed_10m': 'wind',
+    'wind_direction_10m': 'wind',
+    'precipitation': 'rain',
+    'rain': 'rain',
+    'cloud_cover': 'clouds',
+    'pressure_msl': 'pressure',
+    'waves': 'waves'
+};
 
 // Check if demo mode should be enabled from URL parameter
 if (window.location.search.includes('demo=true')) {
@@ -238,13 +261,199 @@ function initMap() {
     map.on('click', onMapClick);
 }
 
+// Initialize Windy Map
+function initWindyMap() {
+    // Check if Windy API is loaded
+    if (typeof windyInit === 'undefined') {
+        console.error('Windy API not loaded. Falling back to static mode.');
+        showTemporaryMessage('Animated overlays unavailable. Windy API failed to load.');
+        // Reset toggle
+        document.getElementById('animatedOverlayToggle').checked = false;
+        return;
+    }
+    
+    showLoading(true);
+    
+    const options = {
+        key: WINDY_API_KEY,
+        lat: 45.0,
+        lon: -95.0,
+        zoom: 4
+    };
+
+    windyInit(options, windyAPIReady);
+}
+
+// Windy API Ready Callback
+function windyAPIReady(windyAPIInstance) {
+    windyAPI = windyAPIInstance;
+    const { map, store, overlays } = windyAPI;
+    windyMap = map;
+    
+    // Set initial layer
+    const initialLayer = document.getElementById('windyLayer').value;
+    store.set('overlay', initialLayer);
+    
+    // Add click listener for weather data
+    windyMap.on('click', function(e) {
+        if (animatedOverlayMode) {
+            onMapClick({ latlng: e.latlng });
+        }
+    });
+    
+    showLoading(false);
+    console.log('Windy API initialized successfully');
+}
+
+// Toggle between static and animated modes
+function toggleAnimatedOverlay(enabled) {
+    animatedOverlayMode = enabled;
+    const mapDiv = document.getElementById('map');
+    const windyMapDiv = document.getElementById('windyMap');
+    const animationControls = document.getElementById('animationControls');
+    const legend = document.getElementById('legend');
+    
+    if (enabled) {
+        // Switch to animated mode
+        mapDiv.classList.add('d-none');
+        windyMapDiv.classList.remove('d-none');
+        animationControls.classList.remove('d-none');
+        
+        // Initialize Windy if not already done
+        if (!windyMap) {
+            initWindyMap();
+        } else {
+            // Sync the view with the Leaflet map
+            const center = map.getCenter();
+            const zoom = map.getZoom();
+            windyMap.setView([center.lat, center.lng], zoom);
+        }
+        
+        // Update legend to show Windy is active
+        legend.style.display = 'none';
+        
+        // Show message if historical data is selected
+        if (currentDataMode === 'historical') {
+            showTemporaryMessage('Animated overlays show forecast data. Historical data mode disabled for animations.');
+        }
+    } else {
+        // Switch to static mode
+        mapDiv.classList.remove('d-none');
+        windyMapDiv.classList.add('d-none');
+        animationControls.classList.add('d-none');
+        legend.style.display = 'block';
+        
+        // Sync the view with Windy map if it exists
+        if (windyMap) {
+            const center = windyMap.getCenter();
+            const zoom = windyMap.getZoom();
+            map.setView([center.lat, center.lng], zoom);
+        }
+    }
+}
+
+// Update Windy Layer
+function updateWindyLayer(layer) {
+    if (windyAPI && animatedOverlayMode) {
+        windyAPI.store.set('overlay', layer);
+    }
+}
+
+// Play/Pause Animation
+function togglePlayPause() {
+    if (!windyAPI || !animatedOverlayMode) return;
+    
+    const { store } = windyAPI;
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    
+    if (isAnimationPlaying) {
+        // Pause - Disable timeline animation
+        // Note: Windy API uses store.set('play', false) to pause the timeline
+        store.set('play', false);
+        isAnimationPlaying = false;
+        playPauseBtn.textContent = '▶ Play';
+    } else {
+        // Play
+        store.set('play', true);
+        isAnimationPlaying = true;
+        playPauseBtn.textContent = '⏸ Pause';
+    }
+}
+
+// Stop Animation
+function stopAnimation() {
+    if (!windyAPI || !animatedOverlayMode) return;
+    
+    const { store } = windyAPI;
+    store.set('timestamp', Date.now());
+    isAnimationPlaying = false;
+    
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    playPauseBtn.textContent = '▶ Play';
+}
+
+// Show temporary message
+function showTemporaryMessage(message) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'alert alert-info alert-dismissible fade show position-fixed top-50 start-50 translate-middle';
+    messageDiv.style.zIndex = '9999';
+    
+    // Safely set text content to avoid XSS
+    messageDiv.textContent = message;
+    
+    // Create and append close button
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'btn-close';
+    closeBtn.setAttribute('data-bs-dismiss', 'alert');
+    closeBtn.setAttribute('aria-label', 'Close');
+    
+    // Add manual click handler as fallback if Bootstrap isn't ready
+    closeBtn.addEventListener('click', () => {
+        if (messageDiv.parentNode) {
+            messageDiv.remove();
+        }
+    });
+    
+    messageDiv.appendChild(closeBtn);
+    
+    document.body.appendChild(messageDiv);
+    
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.remove();
+        }
+    }, 5000);
+}
+
 // Setup event listeners
 function setupEventListeners() {
+    // Animated Overlay Toggle
+    document.getElementById('animatedOverlayToggle').addEventListener('change', (e) => {
+        toggleAnimatedOverlay(e.target.checked);
+    });
+    
+    // Windy Layer Change
+    document.getElementById('windyLayer').addEventListener('change', (e) => {
+        updateWindyLayer(e.target.value);
+    });
+    
+    // Play/Pause Button
+    document.getElementById('playPauseBtn').addEventListener('click', togglePlayPause);
+    
+    // Stop Animation Button
+    document.getElementById('stopAnimationBtn').addEventListener('click', stopAnimation);
+    
     // Data mode change
     document.querySelectorAll('input[name="dataMode"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
             currentDataMode = e.target.value;
             toggleDateTimeSection();
+            
+            // Show warning if historical mode selected with animated overlays
+            if (currentDataMode === 'historical' && animatedOverlayMode) {
+                showTemporaryMessage('Animated overlays show forecast data. Switch to static mode for historical data.');
+            }
         });
     });
 
@@ -252,6 +461,15 @@ function setupEventListeners() {
     document.getElementById('weatherParam').addEventListener('change', (e) => {
         currentWeatherParam = e.target.value;
         updateLegend();
+        
+        // Sync with Windy layer if in animated mode
+        if (animatedOverlayMode) {
+            const windyLayer = parameterToWindyLayer[currentWeatherParam];
+            if (windyLayer) {
+                document.getElementById('windyLayer').value = windyLayer;
+                updateWindyLayer(windyLayer);
+            }
+        }
     });
 
     // Units change
