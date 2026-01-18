@@ -126,7 +126,7 @@
         // Create SVG element helper
         function createSVGElement(type, attributes) {
             const element = document.createElementNS('http://www.w3.org/2000/svg', type);
-            for (let key in attributes) {
+            for (let key of Object.keys(attributes)) {
                 element.setAttribute(key, attributes[key]);
             }
             return element;
@@ -162,7 +162,7 @@
                 const number = dartNumbers[i];
                 const color = i % 2 === 0 ? colors.black : colors.white;
 
-                // Outer single (between double and outer bull)
+                // Outer single (between triple and double rings)
                 const outerSingle = createSVGElement('path', {
                     d: createSegmentPath(rings.outerTriple, rings.innerDouble, startAngle, endAngle),
                     fill: color,
@@ -287,14 +287,7 @@
                 displayText = 'Outer Bull: 25';
             } else {
                 const totalValue = value * multiplier;
-                let multiplierText = '';
-                if (multiplier === 1) {
-                    multiplierText = 'Single';
-                } else if (multiplier === 2) {
-                    multiplierText = 'Double';
-                } else if (multiplier === 3) {
-                    multiplierText = 'Triple';
-                }
+                const multiplierText = ['', 'Single', 'Double', 'Triple'][multiplier];
                 displayText = `${multiplierText} ${value} = ${totalValue}`;
             }
 
