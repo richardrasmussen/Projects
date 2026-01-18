@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Dart Board</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #dartboard-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        #dartboard {
+            cursor: pointer;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        #score-display {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            min-width: 300px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-label {
+            font-size: 16px;
+            color: #bdc3c7;
+            margin-bottom: 10px;
+        }
+
+        .score-value {
+            font-size: 48px;
+            color: #3498db;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .instructions {
+            color: #7f8c8d;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Interactive Dart Board</h1>
+    <div class="container">
+        <div id="dartboard-container">
+            <svg id="dartboard" width="500" height="500"></svg>
+        </div>
+        <div id="score-display">
+            <div class="score-label">Last Hit:</div>
+            <div class="score-value" id="score-value">Click the board!</div>
+        </div>
+        <div class="instructions">
+            Click any segment on the dart board to see its value.<br>
+            Includes singles, doubles, and triples for all numbers 1-20.
+        </div>
+    </div>
+
+    <script>
+        // Dart board configuration
+        const dartNumbers = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
+        const colors = {
+            black: '#000000',
+            white: '#FFFFFF',
+            red: '#DC143C',
+            green: '#228B22',
+            bullseye: '#DC143C',
+            outerBull: '#228B22'
+        };
+
+        // SVG setup
+        const svg = document.getElementById('dartboard');
+        const centerX = 250;
+        const centerY = 250;
+        
+        // Ring radii (from center outward)
+        const rings = {
+            innerBull: 15,      // Inner bullseye (50 points)
+            outerBull: 40,      // Outer bullseye (25 points)
+            innerTriple: 100,   // Start of triple ring
+            outerTriple: 110,   // End of triple ring
+            innerDouble: 160,   // Start of double ring
+            outerDouble: 170    // End of double ring (outer edge)
+        };
+
+        // Create SVG element helper
+        function createSVGElement(type, attributes) {
+            const element = document.createElementNS('http://www.w3.org/2000/svg', type);
+            for (let key of Object.keys(attributes)) {
+                element.setAttribute(key, attributes[key]);
+            }
+            return element;
+        }
+
+        // Create a path for a segment (slice of the pie)
+        function createSegmentPath(innerRadius, outerRadius, startAngle, endAngle) {
+            const startAngleRad = (startAngle - 90) * Math.PI / 180;
+            const endAngleRad = (endAngle - 90) * Math.PI / 180;
+
+            const x1 = centerX + innerRadius * Math.cos(startAngleRad);
+            const y1 = centerY + innerRadius * Math.sin(startAngleRad);
+            const x2 = centerX + outerRadius * Math.cos(startAngleRad);
+            const y2 = centerY + outerRadius * Math.sin(startAngleRad);
+            const x3 = centerX + outerRadius * Math.cos(endAngleRad);
+            const y3 = centerY + outerRadius * Math.sin(endAngleRad);
+            const x4 = centerX + innerRadius * Math.cos(endAngleRad);
+            const y4 = centerY + innerRadius * Math.sin(endAngleRad);
+
+            const largeArc = (endAngle - startAngle) > 180 ? 1 : 0;
+
+            return `M ${x1} ${y1} L ${x2} ${y2} A ${outerRadius} ${outerRadius} 0 ${largeArc} 1 ${x3} ${y3} L ${x4} ${y4} A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${x1} ${y1} Z`;
+        }
+
+        // Draw the dart board
+        function drawDartBoard() {
+            const segmentAngle = 360 / 20;
+
+            // Draw outer ring segments (singles)
+            for (let i = 0; i < 20; i++) {
+                const startAngle = i * segmentAngle;
+                const endAngle = (i + 1) * segmentAngle;
+                const number = dartNumbers[i];
+                const color = i % 2 === 0 ? colors.black : colors.white;
+
+                // Outer single (between triple and double rings)
+                const outerSingle = createSVGElement('path', {
+                    d: createSegmentPath(rings.outerTriple, rings.innerDouble, startAngle, endAngle),
+                    fill: color,
+                    stroke: '#333',
+                    'stroke-width': '0.5',
+                    class: 'segment',
+                    'data-value': number,
+                    'data-multiplier': '1'
+                });
+                outerSingle.addEventListener('click', () => handleSegmentClick(number, 1));
+                outerSingle.addEventListener('mouseenter', function() { this.style.opacity = '0.8'; });
+                outerSingle.addEventListener('mouseleave', function() { this.style.opacity = '1'; });
+                svg.appendChild(outerSingle);
+
+                // Inner single (between outer bull and triple)
+                const innerSingle = createSVGElement('path', {
+                    d: createSegmentPath(rings.outerBull, rings.innerTriple, startAngle, endAngle),
+                    fill: color,
+                    stroke: '#333',
+                    'stroke-width': '0.5',
+                    class: 'segment',
+                    'data-value': number,
+                    'data-multiplier': '1'
+                });
+                innerSingle.addEventListener('click', () => handleSegmentClick(number, 1));
+                innerSingle.addEventListener('mouseenter', function() { this.style.opacity = '0.8'; });
+                innerSingle.addEventListener('mouseleave', function() { this.style.opacity = '1'; });
+                svg.appendChild(innerSingle);
+
+                // Triple ring
+                const tripleColor = i % 2 === 0 ? colors.red : colors.green;
+                const triple = createSVGElement('path', {
+                    d: createSegmentPath(rings.innerTriple, rings.outerTriple, startAngle, endAngle),
+                    fill: tripleColor,
+                    stroke: '#333',
+                    'stroke-width': '0.5',
+                    class: 'segment',
+                    'data-value': number,
+                    'data-multiplier': '3'
+                });
+                triple.addEventListener('click', () => handleSegmentClick(number, 3));
+                triple.addEventListener('mouseenter', function() { this.style.opacity = '0.8'; });
+                triple.addEventListener('mouseleave', function() { this.style.opacity = '1'; });
+                svg.appendChild(triple);
+
+                // Double ring
+                const double = createSVGElement('path', {
+                    d: createSegmentPath(rings.innerDouble, rings.outerDouble, startAngle, endAngle),
+                    fill: tripleColor,
+                    stroke: '#333',
+                    'stroke-width': '0.5',
+                    class: 'segment',
+                    'data-value': number,
+                    'data-multiplier': '2'
+                });
+                double.addEventListener('click', () => handleSegmentClick(number, 2));
+                double.addEventListener('mouseenter', function() { this.style.opacity = '0.8'; });
+                double.addEventListener('mouseleave', function() { this.style.opacity = '1'; });
+                svg.appendChild(double);
+            }
+
+            // Draw outer bullseye (25 points)
+            const outerBull = createSVGElement('circle', {
+                cx: centerX,
+                cy: centerY,
+                r: rings.outerBull,
+                fill: colors.outerBull,
+                stroke: '#333',
+                'stroke-width': '1',
+                class: 'segment'
+            });
+            outerBull.addEventListener('click', () => handleSegmentClick(25, 1));
+            outerBull.addEventListener('mouseenter', function() { this.style.opacity = '0.8'; });
+            outerBull.addEventListener('mouseleave', function() { this.style.opacity = '1'; });
+            svg.appendChild(outerBull);
+
+            // Draw inner bullseye (50 points)
+            const innerBull = createSVGElement('circle', {
+                cx: centerX,
+                cy: centerY,
+                r: rings.innerBull,
+                fill: colors.bullseye,
+                stroke: '#333',
+                'stroke-width': '1',
+                class: 'segment'
+            });
+            innerBull.addEventListener('click', () => handleSegmentClick(50, 1));
+            innerBull.addEventListener('mouseenter', function() { this.style.opacity = '0.8'; });
+            innerBull.addEventListener('mouseleave', function() { this.style.opacity = '1'; });
+            svg.appendChild(innerBull);
+
+            // Add number labels
+            for (let i = 0; i < 20; i++) {
+                const angle = (i * segmentAngle + segmentAngle / 2 - 90) * Math.PI / 180;
+                const labelRadius = rings.outerDouble + 20;
+                const x = centerX + labelRadius * Math.cos(angle);
+                const y = centerY + labelRadius * Math.sin(angle);
+
+                const text = createSVGElement('text', {
+                    x: x,
+                    y: y,
+                    'text-anchor': 'middle',
+                    'dominant-baseline': 'middle',
+                    fill: 'white',
+                    'font-size': '20',
+                    'font-weight': 'bold',
+                    'pointer-events': 'none'
+                });
+                text.textContent = dartNumbers[i];
+                svg.appendChild(text);
+            }
+        }
+
+        // Handle segment click
+        function handleSegmentClick(value, multiplier) {
+            const scoreValueElement = document.getElementById('score-value');
+            let displayText;
+
+            if (value === 50) {
+                displayText = 'BULLSEYE! 50';
+            } else if (value === 25) {
+                displayText = 'Outer Bull: 25';
+            } else {
+                const totalValue = value * multiplier;
+                const multiplierText = ['', 'Single', 'Double', 'Triple'][multiplier];
+                displayText = `${multiplierText} ${value} = ${totalValue}`;
+            }
+
+            scoreValueElement.textContent = displayText;
+
+            // Add animation effect
+            scoreValueElement.style.transform = 'scale(1.1)';
+            scoreValueElement.style.color = '#2ecc71';
+            setTimeout(() => {
+                scoreValueElement.style.transform = 'scale(1)';
+                scoreValueElement.style.color = '#3498db';
+            }, 200);
+        }
+
+        // Initialize
+        drawDartBoard();
+    </script>
+</body>
+</html>
