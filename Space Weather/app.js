@@ -698,7 +698,7 @@
         btn.addEventListener('click', () => {
             btn.parentElement.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            loadGoesMagChart(btn.dataset.goesMagRange);
+            loadGoesMagChart(btn.dataset.goesmagRange);
         });
     });
 
