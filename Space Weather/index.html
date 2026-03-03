@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Weather Dashboard — NOAA SWPC Data</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <span class="brand-icon">☀️</span> Space Weather Dashboard
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="#" data-section="dashboard">📊 Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-section="solar-wind">🌬️ Solar Wind</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-section="geomagnetic">🧲 Geomagnetic</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-section="xray">☢️ X-Ray / Particles</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-section="solar-cycle">🔄 Solar Cycle</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-section="alerts">⚠️ Alerts</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-section="imagery">🖼️ Imagery</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-section="explorer">🔍 Explorer</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ============ STATUS BAR ============ -->
+<div class="status-bar" id="statusBar">
+    <span class="status-indicator">
+        <span class="status-dot green pulse" id="connectionDot"></span>
+        <span id="connectionStatus">Connecting to SWPC...</span>
+    </span>
+    <span class="text-muted">|</span>
+    <span id="lastUpdate" class="text-muted">Last update: —</span>
+    <span class="ms-auto">
+        <button class="btn-refresh" id="refreshAll" title="Refresh all data">🔄 Refresh</button>
+    </span>
+</div>
+
+<!-- ============ MAIN CONTENT ============ -->
+<div class="main-content">
+
+    <!-- ======== DASHBOARD OVERVIEW ======== -->
+    <div class="section-panel active" id="section-dashboard">
+        <div class="section-header">
+            <h2>📊 Space Weather Overview</h2>
+            <p>Real-time conditions from NOAA Space Weather Prediction Center</p>
+        </div>
+
+        <!-- Key Metrics Row -->
+        <div class="metric-grid" id="dashboardMetrics">
+            <div class="metric-card">
+                <div class="metric-label">Kp Index</div>
+                <div class="metric-value" id="metric-kp">—</div>
+                <div class="metric-unit">Geomagnetic Activity</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Solar Wind Speed</div>
+                <div class="metric-value" id="metric-wind-speed">—</div>
+                <div class="metric-unit">km/s</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Wind Density</div>
+                <div class="metric-value" id="metric-wind-density">—</div>
+                <div class="metric-unit">p/cm³</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Bz (IMF)</div>
+                <div class="metric-value" id="metric-bz">—</div>
+                <div class="metric-unit">nT</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">X-Ray Flux</div>
+                <div class="metric-value" id="metric-xray">—</div>
+                <div class="metric-unit">W/m²</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Active Alerts</div>
+                <div class="metric-value" id="metric-alerts">—</div>
+                <div class="metric-unit">Current</div>
+            </div>
+        </div>
+
+        <!-- Dashboard Charts Row -->
+        <div class="row mt-4">
+            <div class="col-lg-6">
+                <div class="sw-card">
+                    <div class="sw-card-header">
+                        <span class="sw-card-title"><span class="icon">🧲</span> Kp Index (Recent)</span>
+                        <span class="sw-card-badge badge-live">Live</span>
+                    </div>
+                    <div class="kp-bars" id="dashKpBars"></div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="sw-card">
+                    <div class="sw-card-header">
+                        <span class="sw-card-title"><span class="icon">🌬️</span> Solar Wind Speed</span>
+                        <span class="sw-card-badge badge-live">Live</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="dashWindChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Alerts Preview -->
+        <div class="sw-card mt-2">
+            <div class="sw-card-header">
+                <span class="sw-card-title"><span class="icon">⚠️</span> Recent Alerts</span>
+                <button class="btn-refresh" onclick="switchSection('alerts')">View All →</button>
+            </div>
+            <div id="dashAlerts">
+                <div class="loading-spinner">Loading alerts...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== SOLAR WIND ======== -->
+    <div class="section-panel" id="section-solar-wind">
+        <div class="section-header">
+            <h2>🌬️ Real-Time Solar Wind</h2>
+            <p>Plasma and magnetic field data from the DSCOVR spacecraft at the L1 point</p>
+        </div>
+
+        <div class="sub-tabs">
+            <button class="sub-tab-btn active" data-subtab="sw-plasma">Plasma</button>
+            <button class="sub-tab-btn" data-subtab="sw-mag">Magnetic Field</button>
+            <button class="sub-tab-btn" data-subtab="sw-table">Data Table</button>
+        </div>
+
+        <div id="subtab-sw-plasma">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="sw-card">
+                        <div class="sw-card-header">
+                            <span class="sw-card-title"><span class="icon">💨</span> Wind Speed</span>
+                            <span class="sw-card-badge badge-live">Live</span>
+                        </div>
+                        <div class="chart-container tall">
+                            <canvas id="swSpeedChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="sw-card">
+                        <div class="sw-card-header">
+                            <span class="sw-card-title"><span class="icon">🔬</span> Proton Density</span>
+                            <span class="sw-card-badge badge-live">Live</span>
+                        </div>
+                        <div class="chart-container tall">
+                            <canvas id="swDensityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sw-card">
+                <div class="sw-card-header">
+                    <span class="sw-card-title"><span class="icon">🌡️</span> Proton Temperature</span>
+                    <span class="sw-card-badge badge-live">Live</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="swTempChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="subtab-sw-mag" style="display:none">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="sw-card">
+                        <div class="sw-card-header">
+                            <span class="sw-card-title"><span class="icon">🧲</span> Bt (Total Field)</span>
+                            <span class="sw-card-badge badge-live">Live</span>
+                        </div>
+                        <div class="chart-container tall">
+                            <canvas id="swBtChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="sw-card">
+                        <div class="sw-card-header">
+                            <span class="sw-card-title"><span class="icon">⬇️</span> Bz (North-South)</span>
+                            <span class="sw-card-badge badge-live">Live</span>
+                        </div>
+                        <div class="chart-container tall">
+                            <canvas id="swBzChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="subtab-sw-table" style="display:none">
+            <div class="sw-card">
+                <div class="sw-card-header">
+                    <span class="sw-card-title"><span class="icon">📋</span> Raw Solar Wind Data</span>
+                </div>
+                <div class="data-table-wrapper" id="swTableWrapper">
+                    <div class="loading-spinner">Loading data...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== GEOMAGNETIC ======== -->
+    <div class="section-panel" id="section-geomagnetic">
+        <div class="section-header">
+            <h2>🧲 Geomagnetic Activity</h2>
+            <p>Planetary K-index and geomagnetic storm monitoring</p>
+        </div>
+
+        <div class="sw-card">
+            <div class="sw-card-header">
+                <span class="sw-card-title"><span class="icon">📊</span> Planetary Kp Index</span>
+                <span class="sw-card-badge badge-live">Live</span>
+            </div>
+            <div class="kp-bars" id="geoKpBars" style="height:180px;"></div>
+        </div>
+
+        <div class="sw-card">
+            <div class="sw-card-header">
+                <span class="sw-card-title"><span class="icon">📈</span> Kp Time Series</span>
+            </div>
+            <div class="chart-container tall">
+                <canvas id="geoKpChart"></canvas>
+            </div>
+        </div>
+
+        <div class="sw-card">
+            <div class="sw-card-header">
+                <span class="sw-card-title"><span class="icon">📋</span> Kp Data Table</span>
+            </div>
+            <div class="data-table-wrapper" id="geoTableWrapper">
+                <div class="loading-spinner">Loading data...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== X-RAY / PARTICLES ======== -->
+    <div class="section-panel" id="section-xray">
+        <div class="section-header">
+            <h2>☢️ X-Ray Flux & Particle Environment</h2>
+            <p>GOES satellite measurements of solar X-rays and energetic particles</p>
+        </div>
+
+        <div class="sub-tabs">
+            <button class="sub-tab-btn active" data-subtab="xr-xray">X-Ray Flux</button>
+            <button class="sub-tab-btn" data-subtab="xr-proton">Proton Flux</button>
+            <button class="sub-tab-btn" data-subtab="xr-mag">Magnetometer</button>
+        </div>
+
+        <div id="subtab-xr-xray">
+            <div class="sw-card">
+                <div class="sw-card-header">
+                    <span class="sw-card-title"><span class="icon">☀️</span> GOES X-Ray Flux</span>
+                    <span class="sw-card-badge badge-live">Live</span>
+                </div>
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" data-xray-range="1">1 Day</button>
+                    <button class="sub-tab-btn" data-xray-range="3">3 Days</button>
+                    <button class="sub-tab-btn" data-xray-range="7">7 Days</button>
+                </div>
+                <div class="chart-container tall">
+                    <canvas id="xrayChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="subtab-xr-proton" style="display:none">
+            <div class="sw-card">
+                <div class="sw-card-header">
+                    <span class="sw-card-title"><span class="icon">⚡</span> GOES Proton Flux</span>
+                    <span class="sw-card-badge badge-live">Live</span>
+                </div>
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" data-proton-range="1">1 Day</button>
+                    <button class="sub-tab-btn" data-proton-range="3">3 Days</button>
+                    <button class="sub-tab-btn" data-proton-range="7">7 Days</button>
+                </div>
+                <div class="chart-container tall">
+                    <canvas id="protonChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="subtab-xr-mag" style="display:none">
+            <div class="sw-card">
+                <div class="sw-card-header">
+                    <span class="sw-card-title"><span class="icon">🧲</span> GOES Magnetometer</span>
+                    <span class="sw-card-badge badge-live">Live</span>
+                </div>
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" data-goesmag-range="1">1 Day</button>
+                    <button class="sub-tab-btn" data-goesmag-range="3">3 Days</button>
+                    <button class="sub-tab-btn" data-goesmag-range="7">7 Days</button>
+                </div>
+                <div class="chart-container tall">
+                    <canvas id="goesMagChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== SOLAR CYCLE ======== -->
+    <div class="section-panel" id="section-solar-cycle">
+        <div class="section-header">
+            <h2>🔄 Solar Cycle</h2>
+            <p>Observed and predicted sunspot numbers and solar radio flux</p>
+        </div>
+
+        <div class="sw-card">
+            <div class="sw-card-header">
+                <span class="sw-card-title"><span class="icon">📈</span> Sunspot Number — Observed vs Predicted</span>
+                <span class="sw-card-badge badge-forecast">Forecast</span>
+            </div>
+            <div class="chart-container tall">
+                <canvas id="solarCycleChart"></canvas>
+            </div>
+        </div>
+
+        <div class="sw-card">
+            <div class="sw-card-header">
+                <span class="sw-card-title"><span class="icon">📡</span> F10.7 cm Solar Radio Flux</span>
+                <span class="sw-card-badge badge-forecast">Forecast</span>
+            </div>
+            <div class="chart-container tall">
+                <canvas id="f107Chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== ALERTS ======== -->
+    <div class="section-panel" id="section-alerts">
+        <div class="section-header">
+            <h2>⚠️ Space Weather Alerts, Watches & Warnings</h2>
+            <p>Official NOAA SWPC notifications</p>
+        </div>
+
+        <div class="sub-tabs" id="alertFilters">
+            <button class="sub-tab-btn active" data-alert-filter="all">All</button>
+            <button class="sub-tab-btn" data-alert-filter="alert">Alerts</button>
+            <button class="sub-tab-btn" data-alert-filter="warning">Warnings</button>
+            <button class="sub-tab-btn" data-alert-filter="watch">Watches</button>
+            <button class="sub-tab-btn" data-alert-filter="summary">Summaries</button>
+        </div>
+
+        <div id="alertsList">
+            <div class="loading-spinner">Loading alerts...</div>
+        </div>
+    </div>
+
+    <!-- ======== IMAGERY ======== -->
+    <div class="section-panel" id="section-imagery">
+        <div class="section-header">
+            <h2>🖼️ Space Weather Imagery</h2>
+            <p>Real-time imagery from NOAA SWPC, GOES, SDO, and SOHO satellites</p>
+        </div>
+
+        <div class="sub-tabs">
+            <button class="sub-tab-btn active" data-img-cat="aurora">Aurora</button>
+            <button class="sub-tab-btn" data-img-cat="solar">Solar</button>
+            <button class="sub-tab-btn" data-img-cat="coronagraph">Coronagraph</button>
+            <button class="sub-tab-btn" data-img-cat="magnetosphere">Magnetosphere</button>
+        </div>
+
+        <div class="image-gallery" id="imageGallery">
+            <div class="loading-spinner">Loading imagery...</div>
+        </div>
+    </div>
+
+    <!-- ======== EXPLORER ======== -->
+    <div class="section-panel" id="section-explorer">
+        <div class="section-header">
+            <h2>🔍 Data Explorer</h2>
+            <p>Browse and inspect any SWPC JSON data endpoint</p>
+        </div>
+
+        <div class="explorer-layout">
+            <div class="explorer-sidebar" id="explorerSidebar">
+                <div class="loading-spinner">Loading endpoints...</div>
+            </div>
+            <div class="explorer-content" id="explorerContent">
+                <p class="text-muted text-center mt-5">← Select an endpoint to view its data</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ============ FOOTER ============ -->
+<div class="sw-footer">
+    Data provided by <a href="https://www.swpc.noaa.gov/" target="_blank">NOAA Space Weather Prediction Center</a> •
+    Imagery from <a href="https://services.swpc.noaa.gov/" target="_blank">SWPC Services</a> •
+    Updated in real-time
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
